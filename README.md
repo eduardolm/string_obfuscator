@@ -10,7 +10,7 @@ This module obfuscates strings, integers, list items.
 This module was developed with easy-of-use in mind, so it's pretty straightforward:
 
 Step-by-step guide:
-+ `from obfuscator import obfuscate`
++ `from string_obfuscator.obfuscate import obfuscate`
 + Dict can be obfuscated by calling: `obfuscate(dict_to_obfuscate, list_with_keys_to_obfuscate)`
 
 ## Python version
