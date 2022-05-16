@@ -6,7 +6,7 @@ from typing import Dict, List
 
 def obfuscate_fields(func):
     @wraps(func)
-    def wrapper(payload: Dict, fields: List = None, fields_enum: Enum = None):
+    def wrapper(payload: Dict, fields: List = None, fields_enum: Enum = None) -> Dict:
         if not fields and not fields_enum:
             raise ValidationError(
                 'Either a list or an enum must be passed to the method')
@@ -17,7 +17,10 @@ def obfuscate_fields(func):
                 wrapper(value, fields)
             elif isinstance(value, list):
                 for i in range(len(value)):
-                    payload[key][i] = func(payload[key][i])
+                    if isinstance(value[i], dict):
+                        wrapper(value[i], fields)
+                    else:
+                        payload[key][i] = func(payload[key][i])
             else:
                 if key in fields:
                     payload[key] = func(payload[key])

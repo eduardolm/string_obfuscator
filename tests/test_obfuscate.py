@@ -49,18 +49,56 @@ class TestObfuscate(TestCase):
         self.assertIsInstance(response, dict)
         self.assertEqual(expected, response)
 
+    def test_obfuscate_dict_with_list_of_dict_passing_enum(self):
+        test_dict = {
+            'name': 'Sample Test Name',
+            'document': '123456789',
+            'id_number': 12345,
+            'email': 'test_email@test.com',
+            'list': [
+                {
+                    'name': 'Test Name',
+                    'document': '55555555',
+                    'age': 53
+                },
+                {
+                    'name': 'Test Name Second',
+                    'document': '4444444',
+                    'age': 28
+                }
+            ]
+        }
+        expected = {
+            'document': '12345****',
+            'email': 'test_email@********',
+            'id_number': '123**',
+            'list': [
+                {
+                    'age': 53,
+                    'document': '********',
+                    'name': 'Test*****'
+                },
+                {
+                    'age': 28,
+                    'document': '******4',
+                    'name': 'Test*Nam********'
+                }
+            ],
+            'name': 'Sample*T********'
+        }
+
+        response = obfuscate(test_dict, [], ENUM)
+
+        self.assertIsNotNone(response)
+        self.assertIsInstance(response, dict)
+        self.assertEqual(expected, response)
+
     def test_obfuscate_should_raise_exception_if_no_parameters_supplied(self):
         test_dict = {
             'name': 'Sample Test Name',
             'document': '123456789',
             'id_number': 12345,
             'email': 'test_email@test.com'
-        }
-        expected = {
-            'document': '12345****',
-            'email': 'test_email@********',
-            'id_number': '123**',
-            'name': 'Sample*T********'
         }
 
         with self.assertRaises(ValidationError):
