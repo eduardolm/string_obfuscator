@@ -12,6 +12,7 @@ This module was developed with easy-of-use in mind, so it's pretty straightforwa
 Step-by-step guide:
 + `from string_obfuscator.obfuscate import obfuscate`
 + Dict can be obfuscated by calling: `obfuscate(dict_to_obfuscate, list_with_keys_to_obfuscate)`
++ Enum can also be passed as an optional parameter: `obfuscate(dict_to_obfuscate, [], enum_with_keys_to_obfuscate)`
 
 ## Python version
 This module was tested in Python 3.7, 3.8.5, 3.9
