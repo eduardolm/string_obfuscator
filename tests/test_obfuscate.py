@@ -1,8 +1,10 @@
+from enum import Enum
 from unittest import TestCase
 
-from src.string_obfuscator.obfuscate import obfuscate
+from src.string_obfuscator.obfuscate import obfuscate, ValidationError
 
 FIELDS_LIST = ['name', 'document', 'id_number', 'email']
+ENUM = Enum('ObfuscateName', {'name': 'name', 'document': 'document', 'id_number': 'id_number', 'email': 'email'})
 
 
 class TestObfuscate(TestCase):
@@ -26,6 +28,43 @@ class TestObfuscate(TestCase):
         self.assertIsNotNone(response)
         self.assertIsInstance(response, dict)
         self.assertEqual(expected, response)
+
+    def test_obfuscate_simple_dict_passing_enum(self):
+        test_dict = {
+            'name': 'Sample Test Name',
+            'document': '123456789',
+            'id_number': 12345,
+            'email': 'test_email@test.com'
+        }
+        expected = {
+            'document': '12345****',
+            'email': 'test_email@********',
+            'id_number': '123**',
+            'name': 'Sample*T********'
+        }
+
+        response = obfuscate(test_dict, [], ENUM)
+
+        self.assertIsNotNone(response)
+        self.assertIsInstance(response, dict)
+        self.assertEqual(expected, response)
+
+    def test_obfuscate_should_raise_exception_if_no_parameters_supplied(self):
+        test_dict = {
+            'name': 'Sample Test Name',
+            'document': '123456789',
+            'id_number': 12345,
+            'email': 'test_email@test.com'
+        }
+        expected = {
+            'document': '12345****',
+            'email': 'test_email@********',
+            'id_number': '123**',
+            'name': 'Sample*T********'
+        }
+
+        with self.assertRaises(ValidationError):
+            obfuscate(test_dict)
 
     def test_obfuscate_simple_dict_with_list(self):
         test_dict_2 = {
